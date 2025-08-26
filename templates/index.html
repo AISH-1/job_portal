@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Job Listings</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      .job-card {
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 15px;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+      }
+      h2 {
+        margin-top: 0;
+      }
+      .skills {
+        margin: 5px 0;
+        color: #444;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Job Listings</h1>
+    <div id="jobs"></div>
+
+    <script>
+      async function loadJobs() {
+        let response = await fetch("/api/jobs");
+        let jobs = await response.json();
+        let container = document.getElementById("jobs");
+        container.innerHTML = "";
+        jobs.forEach((job) => {
+          let div = document.createElement("div");
+          div.className = "job-card";
+          div.innerHTML = `
+          <h2>${job.title} @ ${job.company}</h2>
+          <p>${job.description}</p>
+          <p class="skills"><b>Skills:</b> ${job.skills.join(", ")}</p>
+          <p><b>Salary:</b> ¥${job.salary_min} - ¥${job.salary_max}</p>
+          <p><b>Openings:</b> ${job.openings}</p>
+          <p><b>Deadline:</b> ${job.deadline}</p>
+        `;
+          container.appendChild(div);
+        });
+      }
+      loadJobs();
+    </script>
+  </body>
+</html>
