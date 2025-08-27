@@ -22,6 +22,7 @@ app = Flask(__name__)
 DATABASE_URL = os.environ.get("DATABASE_URL")
 
 conn = psycopg2.connect(DATABASE_URL, sslmode="require")
+conn.set_client_encoding('UTF8')
 
 @app.route("/api/jobs")
 def get_jobs():
@@ -49,7 +50,7 @@ def get_jobs():
             "openings": job[7],
             "deadline": job[8].strftime("%Y-%m-%d")
         })
-    return jsonify(job_list)
+    return jsonify(job_list), 200, {'Content-Type': 'application/json; charset=utf-8'}
 
 @app.route("/")
 def index():
